@@ -5,12 +5,13 @@
     xmlns:local="using:SoundCloud.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:streamViews="using:SoundCloud.View.StreamViews"
     mc:Ignorable="d" Background="#FFFF6600">
 
     <Grid>
         <Pivot Title="SoundCloud">
             <PivotItem Header="Stream">
-                <local:StreamPivot></local:StreamPivot>
+                <streamViews:StreamPivot></streamViews:StreamPivot>
             </PivotItem>
             <PivotItem Header="Explore">
                 <Grid/>

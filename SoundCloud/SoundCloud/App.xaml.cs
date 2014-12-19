@@ -35,7 +35,7 @@ namespace SoundCloud
         public App()
         {
             // Init 
-            _dataManager = new DataManager();
+            _dataManager = DataManager.ManagerInstance;
             _soundCloudClient = new SoundCloudClient();
             _dataManager.SetSoundCloudClient(_soundCloudClient);
 

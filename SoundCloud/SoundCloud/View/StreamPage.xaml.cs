@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 using SoundCloud.Interfaces;
+using SoundCloud.Model;
 
 namespace SoundCloud.View
 {
@@ -22,10 +23,6 @@ namespace SoundCloud.View
 
         private IApplicationController _controller;
         private IDataManager _dataManager;
-
-        // Pages
-
-
         #endregion Variables
 
         public StreamPage()

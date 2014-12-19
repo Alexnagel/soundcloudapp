@@ -29,7 +29,7 @@ namespace SoundCloud.Services
 
             //Logged in User
             { ApiCall.Me,                   new Uri("https://api.soundcloud.com/me.json")} ,
-            { ApiCall.MeStream,             new Uri("https://api.soundcloud.com/me.json")},
+            { ApiCall.MeStream,             new Uri("https://api-v2.soundcloud.com/stream")},
             { ApiCall.MeTracks,             new Uri("https://api.soundcloud.com/me/tracks.json") },
             { ApiCall.MeComments,           new Uri("https://api.soundcloud.com/me/comments.json") },
             { ApiCall.MeFollowing,          new Uri("https://api.soundcloud.com/me/followings.json") },

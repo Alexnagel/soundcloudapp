@@ -78,7 +78,7 @@ namespace SoundCloud.Services.Utils
             return
                 new UriBuilder(uri)
                 {
-                    Query = (uri.Query + "&" + name + "=" + value).TrimStart('&')
+                    Query = (uri.Query + "&" + name + "=" + value).TrimStart('&').TrimStart('?')
                 }
                     .Uri;
         }

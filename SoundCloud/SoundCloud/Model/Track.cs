@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using SoundCloud.Services;
 using SoundCloud.Services.Enums;
+using SQLite.Net.Attributes;
 
 namespace SoundCloud.Model
 {
@@ -18,6 +18,7 @@ namespace SoundCloud.Model
     {
         #region Properties
 
+        [PrimaryKey]
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
@@ -34,7 +35,24 @@ namespace SoundCloud.Model
         public int UserId { get; set; }
 
         [DataMember(Name = "duration")]
-        public int Duration { get; set; }
+        public double Duration { get; set; }
+
+        private string _durationString;
+        public string DurationString
+        {
+            get
+            {
+                if (_durationString == null)
+                {
+                    TimeSpan t = TimeSpan.FromMilliseconds(Duration);
+                    if (t.TotalHours >= 1)
+                        _durationString = t.ToString(@"%h\:%m\:ss");
+                    else
+                        _durationString = t.ToString(@"%m\:ss");
+                }
+                return _durationString;
+            }
+        }
 
         [DataMember(Name = "commentable")]
         public bool Commentable { get; set; }
@@ -121,9 +139,18 @@ namespace SoundCloud.Model
         {
             get
             {
-                return new BitmapImage(new Uri(Artwork, UriKind.Absolute));
+                if (_artworkImage == null)
+                {
+                    if (Artwork != null)
+                        _artworkImage = new BitmapImage(new Uri(Artwork, UriKind.Absolute));
+                    else
+                        _artworkImage = new BitmapImage();
+                }
+                    
+                return _artworkImage;
             }
         }
+        private BitmapImage _artworkImage;
 
         [DataMember(Name = "waveform_url")]
         public string WaveForm { get; set; }
@@ -160,6 +187,9 @@ namespace SoundCloud.Model
 
         [DataMember(Name = "favoritings_count")]
         public int FavoritingsCount { get; set; }
+
+        [DataMember(Name = "likes_count")]
+        public int LikesCount { get; set; }
 
         [DataMember(Name = "comment_count")]
         public int CommentsCount { get; set; }

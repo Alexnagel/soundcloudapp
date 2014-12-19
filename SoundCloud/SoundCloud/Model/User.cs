@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using SoundCloud.Services;
 using SoundCloud.Services.Enums;
+using SQLite.Net.Attributes;
 
 namespace SoundCloud.Model
 {
@@ -14,6 +15,7 @@ namespace SoundCloud.Model
     {
         #region Properties
 
+        [PrimaryKey]
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
