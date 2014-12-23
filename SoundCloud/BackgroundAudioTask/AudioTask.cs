@@ -4,6 +4,7 @@ using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
 using Windows.Media;
 using Windows.Media.Playback;
+using BackgroundAudio.PlayQueue;
 using SoundCloud.Common;
 
 namespace BackgroundAudioTask
@@ -39,7 +40,7 @@ namespace BackgroundAudioTask
             }
         }
 
-        private BaseTrack _currenTrack;
+        private BaseTrack _currentTrack;
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -63,9 +64,6 @@ namespace BackgroundAudioTask
 
             //Add handlers for MediaPlayer
             BackgroundMediaPlayer.Current.CurrentStateChanged += Current_CurrentStateChanged;
-
-            //Add handlers for playlist trackchanged
-            audioManager.TrackChanged += playList_TrackChanged;
 
             //Initialize message channel 
             BackgroundMediaPlayer.MessageReceivedFromForeground += BackgroundMediaPlayer_MessageReceivedFromForeground;
@@ -113,7 +111,6 @@ namespace BackgroundAudioTask
                 //unsubscribe event handlers
                 _systemMediaTransportControls.ButtonPressed -= systemMediaTransportControl_ButtonPressed;
                 _systemMediaTransportControls.PropertyChanged -= systemMediaTransportControl_PropertyChanged;
-                audioManager.TrackChanged -= playList_TrackChanged;
 
                 //clear objects task cancellation can happen uninterrupted
                 BackgroundMediaPlayer.Shutdown(); // shutdown media pipeline
@@ -130,12 +127,14 @@ namespace BackgroundAudioTask
         /// </summary>
         private void UpdateUVCOnNewTrack()
         {
-            if (_currenTrack != audioManager.CurrentTrack)
+            var audioManagerCurrentTrack = audioManager.GetCurrentTrack();
+            if (_currentTrack != audioManagerCurrentTrack)
             {
+                _currentTrack = audioManagerCurrentTrack;
                 _systemMediaTransportControls.PlaybackStatus = MediaPlaybackStatus.Playing;
                 _systemMediaTransportControls.DisplayUpdater.Type = MediaPlaybackType.Music;
-                _systemMediaTransportControls.DisplayUpdater.MusicProperties.Title = audioManager.CurrentTrack.Title;
-                _systemMediaTransportControls.DisplayUpdater.MusicProperties.Artist = audioManager.CurrentTrack.Artist;
+                _systemMediaTransportControls.DisplayUpdater.MusicProperties.Title = audioManagerCurrentTrack.Title;
+                _systemMediaTransportControls.DisplayUpdater.MusicProperties.Artist = audioManagerCurrentTrack.Artist;
                 _systemMediaTransportControls.DisplayUpdater.Update();
             }
         }

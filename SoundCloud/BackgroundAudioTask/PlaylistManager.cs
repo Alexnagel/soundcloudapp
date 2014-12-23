@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Playback;
+using BackgroundAudio.PlayQueue;
 using SoundCloud.Common;
 
 namespace BackgroundAudioTask
@@ -27,26 +28,25 @@ namespace BackgroundAudioTask
         #region Properties
         public BaseTrack CurrentTrack
         {
-            get { return _currentTrack; }
+            get { return _playQueue.GetCurrentTrack(); }
         }
 
         #endregion Properties
 
         #region Variables
-        private BaseTrack _currentTrack;
+
+        private BaseTrack _trackToPlay;
         private int _currentIndex;
         private TimeSpan _startPosition = TimeSpan.FromSeconds(0);
 
-        private MediaPlayer _mediaPlayer;
-        private PlayQueueDB _playQueue;
-
-        public event TypedEventHandler<PlaylistManager, BaseTrack> TrackChanged;
+        private readonly MediaPlayer _mediaPlayer;
+        private readonly SyncPlayQueue _playQueue;
 
         #endregion Variables
 
         private PlaylistManager()
         {
-            _playQueue = new PlayQueueDB();
+            _playQueue = SyncPlayQueue.PlayQueueInstance;
 
             // Set the mediaplayer handlers
             _mediaPlayer = BackgroundMediaPlayer.Current;
@@ -58,34 +58,30 @@ namespace BackgroundAudioTask
 
         #region Playlist Methods
 
-        public void SetPlaylist(IEnumerable<BaseTrack> playlist)
-        {
-            _playQueue.SetQueue(playlist);
-        }
-
-        public void AddToPlaylist(IEnumerable<BaseTrack> playlist)
-        {
-            _playQueue.AddToQueue(playlist);
-        }
-
         public void NextTrack()
         {
-            _currentTrack = _playQueue.GetNext(_currentTrack.dbId);
+            _trackToPlay = _playQueue.GetNext(CurrentTrack.dbId);
             PlayTrack();
         }
 
         public void PreviousTrack()
         {
-            _currentTrack = _playQueue.GetPrevious(_currentTrack.dbId);
+            _trackToPlay = _playQueue.GetPrevious(CurrentTrack.dbId);
             PlayTrack();
         }
 
         public void PlayTrack()
         {
-            if (_currentTrack != null)
+            if (_trackToPlay != null)
             {
+                if (CurrentTrack != null && CurrentTrack.IsPlaying)
+                    _playQueue.SetTrackPlaying(CurrentTrack.dbId, false);
+
+                _playQueue.SetTrackPlaying(_trackToPlay.dbId, true);
+
+                BackgroundMediaPlayer.Current.Volume = 0;
                 BackgroundMediaPlayer.Current.AutoPlay = false;
-                BackgroundMediaPlayer.Current.SetUriSource(_currentTrack.PlaybackUri);
+                BackgroundMediaPlayer.Current.SetUriSource(_trackToPlay.PlaybackUri);
             }
         }
 
@@ -105,18 +101,16 @@ namespace BackgroundAudioTask
                 return;
             }
 
-            // Set current track and index
-            _currentTrack = track;
+            // Set current track
+            _trackToPlay = track;
 
             _startPosition = startPosition;
-            _mediaPlayer.AutoPlay = false;
-            _mediaPlayer.Volume = 0;
-            _mediaPlayer.SetUriSource(track.PlaybackUri);
+            PlayTrack();
         }
 
         public void PlayAllTracks()
         {
-            _currentTrack = _playQueue.GetFirst();
+            _trackToPlay = _playQueue.GetFirst();
             _currentIndex = 0;
             PlayTrack();
         }
@@ -154,6 +148,11 @@ namespace BackgroundAudioTask
             BackgroundMediaPlayer.SendMessageToBackground(value);
         }
 
+        public BaseTrack GetCurrentTrack()
+        {
+            return _playQueue.GetCurrentTrack();
+        }
+
         #endregion Playlist Methods
         
         #region MediaPlayer Handlers
@@ -163,15 +162,14 @@ namespace BackgroundAudioTask
         /// </summary>
         private void mediaPlayer_CurrentStateChanged(MediaPlayer sender, object args)
         {
-
             if (sender.CurrentState == MediaPlayerState.Playing && _startPosition != TimeSpan.FromSeconds(0))
             {
                 // if the start position is other than 0, then set it now
                 sender.Position = _startPosition;
-                sender.Volume = 1.0;
                 _startPosition = TimeSpan.FromSeconds(0);
                 sender.PlaybackMediaMarkers.Clear();
             }
+            sender.Volume = 1.0;
         }
 
         /// <summary>
@@ -180,9 +178,8 @@ namespace BackgroundAudioTask
         private void MediaPlayer_MediaOpened(MediaPlayer sender, object args)
         {
             // wait for media to be ready
-            sender.Play();
-            // invoke handler
-            //TrackChanged.Invoke(this, new BaseTrack());
+            if (sender.CurrentState != MediaPlayerState.Playing)
+                sender.Play();
         }
 
         /// <summary>

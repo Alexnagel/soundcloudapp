@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{36809A4C-88BA-45FE-B76D-BEFDDBBE3B27}</ProjectGuid>
+    <ProjectGuid>{B2364364-D5DF-4E2E-8C56-325FB5E9F619}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BackgroundAudioTask</RootNamespace>
-    <AssemblyName>BackgroundAudioTask</AssemblyName>
+    <RootNamespace>BackgroundAudio.PlayQueue</RootNamespace>
+    <AssemblyName>PlayQueue</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -79,24 +79,31 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SoundCloud\Common\ApplicationSettingsHelper.cs">
-      <Link>ApplicationSettingsHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\SoundCloud\Common\Constants.cs">
-      <Link>Constants.cs</Link>
-    </Compile>
-    <Compile Include="AudioTask.cs" />
-    <Compile Include="PlaylistManager.cs" />
+    <Compile Include="BaseTrack.cs" />
+    <Compile Include="PlayQueueDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyncPlayQueue.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <SDKReference Include="SQLite.WP81, Version=3.8.7.4">
+      <Name>SQLite for Windows Phone 8.1</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PlayQueue\PlayQueue.csproj">
-      <Project>{b2364364-d5df-4e2e-8c56-325fb5e9f619}</Project>
-      <Name>PlayQueue</Name>
+    <ProjectReference Include="..\..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj">
+      <Project>{38af8105-65b6-4a14-a258-1137d9e40ef1}</Project>
+      <Name>SQLite.Net.Platform.WindowsPhoneApp81</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
+      <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
+      <Name>SQLite.Net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SQLite.Net.Async, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SQLite.Net.Async.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

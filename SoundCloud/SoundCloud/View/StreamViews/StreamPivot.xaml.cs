@@ -1,14 +1,11 @@
 ﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using Windows.UI.Xaml.Controls;
 using SoundCloud.Audio;
 using SoundCloud.Data;
 using SoundCloud.Model;
-using SoundCloud.Services.Events;
 
 namespace SoundCloud.View.StreamViews
 {
@@ -38,6 +35,7 @@ namespace SoundCloud.View.StreamViews
         private StreamLoadingCollection _streamTracks;
         private DataManager _dataManager;
         private AudioManager _audioManager;
+        private readonly object _padlock = new object();
         #endregion Variables
 
         public StreamPivot()
@@ -46,23 +44,35 @@ namespace SoundCloud.View.StreamViews
             initRelayCommands();
 
             _dataManager = DataManager.ManagerInstance;
-            _streamTracks = new StreamLoadingCollection(_dataManager);
 
             _audioManager = AudioManager.ManagerInstance;
             _audioManager.UserAuth = _dataManager.GetUserAuthKey();
-
-            _audioManager.SetPlaylist(_streamTracks);
-            _streamTracks.CollectionChanged += _streamTracks_CollectionChanged;
+            
+            InitStream();
 
             this.InitializeComponent();
+        }
+
+        private void InitStream()
+        {
+            if (!_audioManager.IsPlaying)
+            {
+                // Empty the current playlist
+                _audioManager.EmptyPlaylist();
+            }
+
+            // Start the stream collection
+            _streamTracks = new StreamLoadingCollection(_dataManager);
+            _streamTracks.CollectionChanged += _streamTracks_CollectionChanged;
             NotifyPropertyChanged("StreamTracks");
         }
 
         void _streamTracks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            _audioManager.SetPlaylist(_streamTracks);
-            if (_streamTracks.Count == 1)
-                _audioManager.PlayTrack(_streamTracks[0].Id);
+            lock (_padlock)
+            {
+                _audioManager.AddToPlaylist(_streamTracks[_streamTracks.Count - 1]);
+            }
         }
 
         private void initRelayCommands()

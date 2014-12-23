@@ -121,6 +121,7 @@
     <Compile Include="View\NowPlayingPage.xaml.cs">
       <DependentUpon>NowPlayingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\RoundedButton.cs" />
     <Compile Include="View\StreamPage.xaml.cs">
       <DependentUpon>StreamPage.xaml</DependentUpon>
     </Compile>
@@ -178,10 +179,16 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SQLite.Net">
+    <Reference Include="SQLite.Net, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SQLite.Net.dll</HintPath>
     </Reference>
-    <Reference Include="SQLite.Net.Platform.WindowsPhoneApp81">
+    <Reference Include="SQLite.Net.Async, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SQLite.Net.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.Net.Platform.WindowsPhoneApp81, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SQLite.Net.Platform.WindowsPhoneApp81.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
@@ -196,6 +203,18 @@
       <Project>{36809a4c-88ba-45fe-b76d-befddbbe3b27}</Project>
       <Name>BackgroundAudioTask</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PlayQueue\PlayQueue.csproj">
+      <Project>{b2364364-d5df-4e2e-8c56-325fb5e9f619}</Project>
+      <Name>PlayQueue</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.WP81, Version=3.8.7.4">
+      <Name>SQLite for Windows Phone 8.1</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

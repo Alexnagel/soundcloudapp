@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using SoundCloud.Exceptions;
+using SoundCloud.Services.Authentication;
 using SoundCloud.Services.Enums;
 using SoundCloud.Services.Events;
 using SoundCloud.Services.Utils;
@@ -25,7 +26,7 @@ namespace SoundCloud.Services
             { ApiCall.AuthorizationFlow,    new Uri("https://soundcloud.com/connect?scope=non-expiring&client_id={0}&response_type={1}&redirect_uri={2}")},
             { ApiCall.UserAgentFlow,        new Uri("https://soundcloud.com/connect?client_id={0}&response_type=token&redirect_uri={1}") },
             { ApiCall.UserCredentialsFlow,  new Uri("https://api.soundcloud.com/oauth2/token?client_id={0}&client_secret={1}&grant_type=password&username={2}&password={3}") },
-            { ApiCall.RefreshToken,         new Uri("https://api.soundcloud.com/oauth2/token&client_id={0}&client_secret={1}&grant_type=refresh_token&refresh_token={2}") },
+            { ApiCall.RefreshToken,         new Uri("https://api.soundcloud.com/oauth2/token?client_id={0}&client_secret={1}&grant_type=refresh_token&refresh_token={2}") },
 
             //Logged in User
             { ApiCall.Me,                   new Uri("https://api.soundcloud.com/me.json")} ,
@@ -111,7 +112,11 @@ namespace SoundCloud.Services
                 ApiDictionary[command]
                     .With(parameters);
 
-            bool requireAuthentication = command != ApiCall.UserCredentialsFlow;
+            bool requireAuthentication = true;
+            if (command == ApiCall.RefreshToken || command == ApiCall.UserCredentialsFlow)
+            {
+                requireAuthentication = false;
+            }
 
             return await ApiAction<T>(uri, method, requireAuthentication);
         }
@@ -218,8 +223,26 @@ namespace SoundCloud.Services
                 else
                 {
                     //OnApiActionError Event
-                    OnApiActionError(EventArgs.Empty);
-                    throw new SoundCloudException(string.Format("{0} : {1}", response.StatusCode, response.ReasonPhrase));
+
+                    if (response.StatusCode != HttpStatusCode.Unauthorized)
+                    {
+                        OnApiActionError(new SoundCloudEventArgs());
+                        throw new SoundCloudException(string.Format("{0} : {1}", response.StatusCode,
+                            response.ReasonPhrase));
+                    }
+                    else
+                    {
+                        AccessToken token =
+                            await
+                                ApiAction<AccessToken>(ApiCall.RefreshToken, HttpMethod.POST, ClientID,
+                                    ClientSecret, ScAccessToken.RefreshToken);
+                        if (token != null)
+                        {
+                            ScAccessToken = token;
+                            
+                            return await ApiAction<T>(uri, method, requireAuthentication);
+                        }
+                    }
                 }
             }
 
@@ -227,6 +250,7 @@ namespace SoundCloud.Services
             {
                 throw new SoundCloudException(string.Format("{0} : {1}", response.StatusCode, response.ReasonPhrase));
             }
+            return default(T);
         }
         #endregion Shared Methods
     }

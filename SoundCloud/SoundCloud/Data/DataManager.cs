@@ -49,21 +49,13 @@ namespace SoundCloud.Data
         private DataManager()
         {
             _settingsFolder = ApplicationData.Current.LocalFolder;
-#if DEBUG
-            AccessToken token = new AccessToken();
-            token.ExpiresIn = 21599;
-            token.Scope = "*";
-            token.Token = "1-63622-2668798-9bf2b2907160f912";
-            token.RefreshToken = "f8175be9cbffc54dbfadc82e9d7c438b";
-
-            _soundCloudClient = new SoundCloudClient(token);
-#endif
         }
 
         public void SetSoundCloudClient(SoundCloudClient client)
         {
-            //_soundCloudClient = client;
-            //setCurrentUser();
+            _soundCloudClient = client;
+            if (client.IsAuthenticated)
+                setCurrentUser();
         }
 
         private async void setCurrentUser()

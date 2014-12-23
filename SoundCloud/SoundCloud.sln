@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net", "..\..\..\..\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Platform.WinRT", "..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WinRT\SQLite.Net.Platform.WinRT.csproj", "{6891E212-AEEE-4763-AC6F-BD7213C13890}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayQueue", "PlayQueue\PlayQueue.csproj", "{B2364364-D5DF-4E2E-8C56-325FB5E9F619}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,7 @@ Global
 		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Debug|x86.Build.0 = Debug|Any CPU
 		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4971D437-0694-4297-A8CC-146CE08C3BD9}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -99,6 +102,20 @@ Global
 		{6891E212-AEEE-4763-AC6F-BD7213C13890}.Release|x64.Build.0 = Release|x64
 		{6891E212-AEEE-4763-AC6F-BD7213C13890}.Release|x86.ActiveCfg = Release|x86
 		{6891E212-AEEE-4763-AC6F-BD7213C13890}.Release|x86.Build.0 = Release|x86
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|ARM.ActiveCfg = Debug|ARM
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|ARM.Build.0 = Debug|ARM
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|x86.ActiveCfg = Debug|x86
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Debug|x86.Build.0 = Debug|x86
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|ARM.ActiveCfg = Release|ARM
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|ARM.Build.0 = Release|ARM
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|x64.ActiveCfg = Release|Any CPU
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|x86.ActiveCfg = Release|x86
+		{B2364364-D5DF-4E2E-8C56-325FB5E9F619}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

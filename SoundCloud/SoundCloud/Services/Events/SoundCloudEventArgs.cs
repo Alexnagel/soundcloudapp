@@ -2,9 +2,16 @@
 
 namespace SoundCloud.Services.Events
 {
+    public enum EventEnum
+    {
+        Unauthenticated
+    }
+
     public class SoundCloudEventArgs : EventArgs
     {
         #region Properties
+
+        public EventEnum EventError { get; set; }
 
         /// <summary>
         /// Json response returned by the server.

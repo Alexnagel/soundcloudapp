@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Windows.Media.Playback;
+using BackgroundAudio.PlayQueue;
 using BackgroundAudioTask;
 using SoundCloud.Common;
 using SoundCloud.Model;
@@ -31,9 +33,9 @@ namespace SoundCloud.Audio
 
         #region Properties
 
-        public List<BaseTrack> Playlist
+        public bool IsPlaying
         {
-            get { return _playlist; }
+            get { return _isPlaying; }
         }
 
         public string UserAuth { get; set; }
@@ -41,66 +43,107 @@ namespace SoundCloud.Audio
         #endregion Properties
 
         #region Variables
+        private readonly SyncPlayQueue _playQueueDb;
+        private readonly PlaylistManager _playlistManager;
 
-        private AutoResetEvent _taskInitialized;
-        private List<BaseTrack> _playlist;
-
-        private PlaylistManager _playlistManager;
+        private bool _isPlaying;
         #endregion Variables
 
         private AudioManager()
         {
             _playlistManager = PlaylistManager.ManagerInstance;
-            _taskInitialized = new AutoResetEvent(false);
+            _playQueueDb = SyncPlayQueue.PlayQueueInstance;
+            _isPlaying = false;
+        }
 
-            StartBackgroundAudioTask();
+        /* ASYNC
+        public async Task<bool> EmptyPlaylist()
+        {
+            return await _playQueueDb.EmptyQueue();
         }
 
         public async void SetPlaylist(ObservableCollection<CollectionItem> playlist)
         {
-            _playlist = new List<BaseTrack>();
-
             foreach (var collectionItem in playlist)
             {
-                if (collectionItem.Type == "playlist" || collectionItem.Type == "playlist-repost")
-                {
-                    // TODO: For each track in playlist place in list
-                }
-                else
-                {
-                    BaseTrack track = new BaseTrack()
-                    {
-                        Artist = collectionItem.ItemTrack.User.UserName,
-                        Id = collectionItem.Id,
-                        PlaybackUri = new Uri(collectionItem.ItemTrack.StreamUrl).UriWithAuthorizedUri(UserAuth),
-                        Title = collectionItem.ItemTrack.Title
-                    };
-                    _playlist.Add(track);
-                }
+                await AddToPlaylist(collectionItem);
             }
-            //_playlistManager.AddToPlaylist(_playlist);
         }
 
-        private void StartBackgroundAudioTask()
+        public async Task<bool> AddToPlaylist(CollectionItem collectionItem)
         {
-            AddMediaPlayerEventHandlers();
-            bool result = _taskInitialized.WaitOne(2000);
-            //Send message to initiate playback
-            if (result)
+            var track = new BaseTrack();
+            if (collectionItem.Type == "playlist" || collectionItem.Type == "playlist-repost")
             {
-               /* var message = new ValueSet();
-                message.Add(Constants.StartPlayback, "0");
-                BackgroundMediaPlayer.SendMessageToBackground(message);*/
+                // TODO: For each track in playlist place in list
             }
             else
             {
-                throw new Exception("Background Audio Task didn't start in expected time");
+                track = new BaseTrack()
+                {
+                    Artist = collectionItem.ItemTrack.User.UserName,
+                    Id = collectionItem.Id,
+                    PlaybackUri = new Uri(collectionItem.ItemTrack.StreamUrl).UriWithAuthorizedUri(UserAuth),
+                    Title = collectionItem.ItemTrack.Title
+                };
+            }
+
+            if (!string.IsNullOrEmpty(track.Id))
+            {
+                return await _playQueueDb.AddOneToQueue(track);
+            }
+            return false;
+        }
+        */
+
+        public BaseTrack GetCurrentTrack()
+        {
+            return _playQueueDb.GetCurrentTrack();
+        }
+
+        public bool EmptyPlaylist()
+        {
+            return _playQueueDb.EmptyQueue();
+        }
+
+        public void SetPlaylist(ObservableCollection<CollectionItem> playlist)
+        {
+            foreach (var collectionItem in playlist)
+            {
+                AddToPlaylist(collectionItem);
             }
         }
 
+        public bool AddToPlaylist(CollectionItem collectionItem)
+        {
+            var track = new BaseTrack();
+            if (collectionItem.Type == "playlist" || collectionItem.Type == "playlist-repost")
+            {
+                // TODO: For each track in playlist place in list
+            }
+            else
+            {
+                track = new BaseTrack()
+                {
+                    Artist = collectionItem.ItemTrack.User.UserName,
+                    Id = collectionItem.Id,
+                    ArtworkUri = collectionItem.ItemTrack.Artwork,
+                    PlaybackUri = new Uri(collectionItem.ItemTrack.StreamUrl).UriWithAuthorizedUri(UserAuth),
+                    Title = collectionItem.ItemTrack.Title
+                };
+            }
+
+            if (!string.IsNullOrEmpty(track.Id))
+            {
+                return _playQueueDb.AddOneToQueue(track);
+            }
+            return false;
+        }
+
+
         public void PlayTrack(string id)
         {
-            _playlistManager.PlayAllTracksM();
+            _playlistManager.PlayTrack(id, TimeSpan.FromSeconds(0));
         }
 
         #region Background Media Handlers
@@ -136,7 +179,6 @@ namespace SoundCloud.Audio
                         break;
                     case Constants.BackgroundTaskStarted:
                         //Wait for Background Task to be initialized before starting playback
-                        _taskInitialized.Set();
                         break;
                 }
             }

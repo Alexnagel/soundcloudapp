@@ -39,7 +39,9 @@ namespace SoundCloud.Services
         /// <summary>
         /// The client id given
         /// </summary>
-        protected static string ClientID = "5ea213bbb33d27b0cb746f2ddf349342";
+        public static string ClientID = "5ea213bbb33d27b0cb746f2ddf349342";
+
+        public static string ClientSecret = "a6441c7f70eb6fe9b6d78a6dbe2650d0";
 
         public SoundCloudClient()
         {
@@ -100,6 +102,22 @@ namespace SoundCloud.Services
             return token;
         }
 
+        public async Task<AccessToken> Reauthenticate()
+        {
+            AccessToken token = null;
+
+            try
+            {
+                token = await SoundCloudWrapper.ApiAction<AccessToken>(ApiCall.RefreshToken, HttpMethod.POST,
+                    Credentials.ClientID, Credentials.ClientSecret, Credentials.UserName, Credentials.Password);
+            }
+            catch (SoundCloudException e)
+            {
+                
+            }
+            return token;
+        }
+
         #region defaultHandlers
         public delegate void EventHandler(object sender, EventArgs e);
         public static event EventHandler ApiActionExecuting;
@@ -120,7 +138,7 @@ namespace SoundCloud.Services
 
         public static event EventHandler ApiActionError;
 
-        protected static void OnApiActionError(EventArgs e)
+        protected static void OnApiActionError(SoundCloudEventArgs e)
         {
             if (ApiActionError != null)
                 ApiActionError(null, e);
