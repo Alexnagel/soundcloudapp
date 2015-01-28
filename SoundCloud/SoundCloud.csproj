@@ -120,6 +120,9 @@
     <Compile Include="Services\SoundCloudWrapper.cs" />
     <Compile Include="Services\Utils\JsonSerializer.cs" />
     <Compile Include="Services\Utils\Util.cs" />
+    <Compile Include="View\ExploreViews\ExplorePage.xaml.cs">
+      <DependentUpon>ExplorePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ExploreViews\ExplorePivot.xaml.cs">
       <DependentUpon>ExplorePivot.xaml</DependentUpon>
     </Compile>
@@ -178,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\ExploreViews\ExplorePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ExploreViews\ExplorePivot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -332,9 +332,9 @@ namespace SoundCloud.Data
 
         #region Explore
 
-        public async Task<List<String>> GetExploreCategories()
+        public async Task<ObservableCollection<String>> GetExploreCategories()
         {
-            List<String> explore_list = new List<String>();
+            ObservableCollection<String> explore_list = new ObservableCollection<String>();
             if (_explore == null)
             {
                 _explore = await ScExplore.GetMusicExploreCategories();

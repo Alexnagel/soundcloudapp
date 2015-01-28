@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SoundCloud.Model;
 using SoundCloud.Services;
 using SoundCloud.Services.Authentication;
+using System;
 
 namespace SoundCloud.Interfaces
 {
@@ -18,5 +19,7 @@ namespace SoundCloud.Interfaces
         Task<ObservableCollection<Track>> GetNextCatgoryTracks();
 
         Task<ObservableCollection<Track>> GetCategoryStream();
+
+        Task<ObservableCollection<String>> GetExploreCategories();
     }
 }
