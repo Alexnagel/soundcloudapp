@@ -89,16 +89,12 @@ namespace SoundCloud.Data
         }
         #endregion Private DB Init
 
-        public void SetSoundCloudClient(SoundCloudClient client)
+        public async Task<bool> SetSoundCloudClient(SoundCloudClient client)
         {
             _soundCloudClient = client;
             if (client.IsAuthenticated)
-                setCurrentUser();
-        }
-
-        private async void setCurrentUser()
-        {
-            _currentUser = await User.Me();
+                _currentUser = await User.Me();
+            return true;
         }
 
         #region Authentication

@@ -9,7 +9,7 @@ namespace SoundCloud.Interfaces
 {
     public interface IDataManager
     {
-        void SetSoundCloudClient(SoundCloudClient client);
+        Task<bool> SetSoundCloudClient(SoundCloudClient client);
         Task<AccessToken> GetUserAccessToken();
         void SaveAccessToken();
 
