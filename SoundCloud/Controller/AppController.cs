@@ -85,7 +85,7 @@ namespace SoundCloud.Controller
             if (success != null)
             {
                 // Set the SoundCloudClient in the Controller
-                _dataManager.SetSoundCloudClient(soundCloudClient);
+                await _dataManager.SetSoundCloudClient(soundCloudClient);
                 _dataManager.SaveAccessToken();
 
                 _audioManager.UserAuth = _dataManager.GetUserAuthKey();
@@ -99,7 +99,7 @@ namespace SoundCloud.Controller
             AccessToken token = await _dataManager.GetUserAccessToken();
             if (token != null)
             {
-                _dataManager.SetSoundCloudClient(new SoundCloudClient(token));
+                await _dataManager.SetSoundCloudClient(new SoundCloudClient(token));
                 _audioManager.UserAuth = _dataManager.GetUserAuthKey();
                 return true;
             }

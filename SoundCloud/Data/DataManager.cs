@@ -330,11 +330,10 @@ namespace SoundCloud.Data
 
         public async Task<ObservableCollection<String>> GetExploreCategories()
         {
-            ObservableCollection<String> explore_list = new ObservableCollection<String>();
+            var explore_list = new ObservableCollection<String>();
             if (_explore == null)
             {
                 _explore = await ScExplore.GetMusicExploreCategories();
-                _explore = await ScExplore.GetAudioExploreCategories();
             }
 
             foreach (string item in _explore.AudioCategories)

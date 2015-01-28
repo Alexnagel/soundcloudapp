@@ -132,6 +132,20 @@ namespace SoundCloud.Audio
             return success;
         }
 
+        public bool AddToPlaylist(Track track)
+        {
+            var baseTrack = new BaseTrack()
+            {
+                Artist = track.User.UserName,
+                Id = track.Id.ToString(),
+                ArtworkUri = track.Artwork,
+                PlaybackUri = new Uri(track.StreamUrl).UriWithAuthorizedUri(UserAuth),
+                Title = track.Title,
+                Duration = track.Duration
+            };
+            return _playQueueDb.AddOneToQueue(baseTrack);
+        }
+
         #region Forground Media Handlers
 
         public TimeSpan CurrentTrackPosition()

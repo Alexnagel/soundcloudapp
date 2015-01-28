@@ -68,6 +68,7 @@ namespace SoundCloud.Services
         public SoundCloudClient(AccessToken accessToken)
         {
             ScAccessToken = accessToken;
+            IsAuthenticated = true;
 
             EnableGZip = true;
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using SoundCloud.Services;
@@ -34,14 +35,28 @@ namespace SoundCloud.Model
         [DataMember(Name = "avatar_url")]
         public string Avatar { get; set; }
 
+        [Ignore]
+        [IgnoreDataMember]
+        public Uri AvatarUri
+        {
+            get { return new Uri(Avatar); }
+        }
+
         [DataMember(Name = "country")]
         public string Country { get; set; }
 
-        [DataMember(Name = "full_name")]
-        public string FullName { get; set; }
-
         [DataMember(Name = "city")]
         public string City { get; set; }
+
+        [Ignore]
+        [IgnoreDataMember]
+        public string CityCountry
+        {
+            get { return City + ((!String.IsNullOrEmpty(Country) && !String.IsNullOrEmpty(City)) ? ", " : "") + Country; }
+        }
+
+        [DataMember(Name = "full_name")]
+        public string FullName { get; set; }
 
         [DataMember(Name = "description")]
         public string Description { get; set; }
@@ -164,15 +179,15 @@ namespace SoundCloud.Model
             return await SoundCloudWrapper.ApiAction<List<Track>>(ApiCall.UserFavorites, Id);
         }
 
-/* Comment Start
-        /// <summary>
-        /// Returns a collection of groups joined by user with user id.
-        /// </summary>
-        public List<Group> GetGroups()
-        {
-            return SoundCloudWrapper.ApiAction<List<Group>>(ApiCall.UserGroups, Id);
-        }
-
+        /* Comment Start
+                /// <summary>
+                /// Returns a collection of groups joined by user with user id.
+                /// </summary>
+                public List<Group> GetGroups()
+                {
+                    return SoundCloudWrapper.ApiAction<List<Group>>(ApiCall.UserGroups, Id);
+                }
+        */
         /// <summary>
         /// Returns a collection of playlists created by user with user id
         /// </summary>
@@ -180,7 +195,7 @@ namespace SoundCloud.Model
         {
             return await SoundCloudWrapper.ApiAction<List<Playlist>>(ApiCall.UserPlaylists, Id);
         }
-*/
+
 
         #endregion Public Methods
 

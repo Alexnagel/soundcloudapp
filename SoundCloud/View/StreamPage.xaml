@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:streamViews="using:SoundCloud.View.StreamViews"
     xmlns:exploreViews="using:SoundCloud.View.ExploreViews"
+    xmlns:userViews="using:SoundCloud.View.UserViews"
     mc:Ignorable="d" Background="#FFFF6600"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
     
@@ -32,7 +33,7 @@
                 <local:PlaylistPivot></local:PlaylistPivot>
             </PivotItem>
             <PivotItem Header="Me">
-                <Grid/>
+                <userViews:MePivot></userViews:MePivot>
             </PivotItem>
         </Pivot>
 
