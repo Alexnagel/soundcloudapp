@@ -3,13 +3,9 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 using SoundCloud.Audio;
 using SoundCloud.Common;
 using SoundCloud.Controller;
-using SoundCloud.Interfaces;
-using SoundCloud.Model;
 
 namespace SoundCloud.View
 {
@@ -19,7 +15,7 @@ namespace SoundCloud.View
     public sealed partial class StreamPage : Page, INotifyPropertyChanged
     {
         #region RelayCommands
-        public RelayCommand ToNowPlayingCommand;
+        public RelayCommand ToNowPlayingCommand { get; set; }
         #endregion RelayCommands
 
         #region Properties
@@ -56,7 +52,7 @@ namespace SoundCloud.View
 
             this.InitializeComponent();
             ShowNowPlaying = AudioManager.IsPlaying ? Visibility.Visible : Visibility.Collapsed;
-            //ShowNowPlaying = Visibility.Visible;
+
             AudioManager.TrackLoaded += TrackLoaded;
         }
 
@@ -99,5 +95,6 @@ namespace SoundCloud.View
         }
 
         #endregion
+
     }
 }

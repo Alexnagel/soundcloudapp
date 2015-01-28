@@ -175,6 +175,9 @@ namespace SoundCloud.Audio
             message.Add(Constants.StartPlaybackWithId, "");
             message.Add("trackid", id);
             BackgroundMediaPlayer.SendMessageToBackground(message);
+            
+            // Set isPlaying to true
+            _isPlaying = true;
         }
 
         public void PauseTrack()

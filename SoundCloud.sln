@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundAudioTask", "Back
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayQueue", "PlayQueue\PlayQueue.csproj", "{B2364364-D5DF-4E2E-8C56-325FB5E9F619}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net", "..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj", "{4971D437-0694-4297-A8CC-146CE08C3BD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net", "..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj", "{4971D437-0694-4297-A8CC-146CE08C3BD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Platform.WindowsPhoneApp81", "..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj", "{38AF8105-65B6-4A14-A258-1137D9E40EF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Platform.WindowsPhoneApp81", "..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj", "{38AF8105-65B6-4A14-A258-1137D9E40EF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Platform.WinRT", "..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WinRT\SQLite.Net.Platform.WinRT.csproj", "{6891E212-AEEE-4763-AC6F-BD7213C13890}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Platform.WinRT", "..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WinRT\SQLite.Net.Platform.WinRT.csproj", "{6891E212-AEEE-4763-AC6F-BD7213C13890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

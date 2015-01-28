@@ -89,11 +89,11 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj">
+    <ProjectReference Include="..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj">
       <Project>{38af8105-65b6-4a14-a258-1137d9e40ef1}</Project>
       <Name>SQLite.Net.Platform.WindowsPhoneApp81</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
+    <ProjectReference Include="..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
       <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
       <Name>SQLite.Net</Name>
     </ProjectReference>
