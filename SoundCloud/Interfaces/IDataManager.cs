@@ -14,5 +14,9 @@ namespace SoundCloud.Interfaces
 
         Task<ObservableCollection<CollectionItem>> GetStream();
         Task<ObservableCollection<CollectionItem>> GetNextPageStream(int lastId);
+
+        Task<ObservableCollection<Track>> GetNextCatgoryTracks();
+
+        Task<ObservableCollection<Track>> GetCategoryStream();
     }
 }

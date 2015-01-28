@@ -80,7 +80,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BaseTrack.cs" />
-    <Compile Include="PlayQueueDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncPlayQueue.cs" />
   </ItemGroup>
@@ -90,20 +89,14 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj">
+    <ProjectReference Include="..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj">
       <Project>{38af8105-65b6-4a14-a258-1137d9e40ef1}</Project>
       <Name>SQLite.Net.Platform.WindowsPhoneApp81</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
+    <ProjectReference Include="..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
       <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
       <Name>SQLite.Net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="SQLite.Net.Async, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SQLite.Net.Async.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
