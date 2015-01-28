@@ -56,6 +56,7 @@ namespace SoundCloud.View
 
             this.InitializeComponent();
             ShowNowPlaying = AudioManager.IsPlaying ? Visibility.Visible : Visibility.Collapsed;
+            //ShowNowPlaying = Visibility.Visible;
             AudioManager.TrackLoaded += TrackLoaded;
         }
 

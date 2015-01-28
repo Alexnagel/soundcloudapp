@@ -15,16 +15,18 @@ namespace SoundCloud.Model.Explore
     {
         private IDataManager _dataManager;
         private bool _hasMoreItems;
-
+        private String chosenCategory;
         public bool HasMoreItems
         {
             get { return _hasMoreItems; }
         }
 
-        public ExploreLoadingCollection(IDataManager dataManager)
+        public ExploreLoadingCollection(IDataManager dataManager, String chosenCategory)
         {
             _dataManager = dataManager;
             _hasMoreItems = true;
+            this.chosenCategory = chosenCategory;
+            
         }
 
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
@@ -34,7 +36,7 @@ namespace SoundCloud.Model.Explore
                 async () =>
                 {
                     uint resultCount = 0;
-                    var result = await _dataManager.GetNextCatgoryTracks();
+                    var result = await _dataManager.GetNextCatgoryTracks(chosenCategory);
 
                     if (result == null || result.Count == 0)
                         _hasMoreItems = false;

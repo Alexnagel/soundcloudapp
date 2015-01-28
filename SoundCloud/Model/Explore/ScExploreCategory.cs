@@ -20,9 +20,9 @@ namespace SoundCloud.Model.Explore
         public ObservableCollection<Track> CategoryTracks { get; set; }
 
 
-        public static async Task<ScExploreCategory> GetCategoryTracks()
+        public static async Task<ScExploreCategory> GetCategoryTracks(String chosenCategory)
         {
-            return await SoundCloudWrapper.ApiAction<ScExploreCategory>(ApiCall.ExploreCategories, "dance");
+            return await SoundCloudWrapper.ApiAction<ScExploreCategory>(ApiCall.ExploreCategories, chosenCategory);
         }
 
         public static async Task<ScExploreCategory> GetNextCatogoryTracks(string nextHref)

@@ -380,14 +380,14 @@ namespace SoundCloud.Data
         }
 
 
-        public async Task<ObservableCollection<Track>> GetCategoryStream()
+        public async Task<ObservableCollection<Track>> GetCategoryStream(String chosenCategory )
         {
             if (_exploreCategory == null)
-                _exploreCategory = await ScExploreCategory.GetCategoryTracks();
+                _exploreCategory = await ScExploreCategory.GetCategoryTracks(chosenCategory);
             return _exploreCategory.CategoryTracks;
         }
 
-        public async Task<ObservableCollection<Track>> GetNextCatgoryTracks()
+        public async Task<ObservableCollection<Track>> GetNextCatgoryTracks(String chosenCategory)
         {
             if (_exploreCategory != null)
             {
@@ -401,7 +401,7 @@ namespace SoundCloud.Data
                 return newItems;
             }
             else
-                return await GetCategoryStream();
+                return await GetCategoryStream(chosenCategory);
         }
 
         #endregion Explore

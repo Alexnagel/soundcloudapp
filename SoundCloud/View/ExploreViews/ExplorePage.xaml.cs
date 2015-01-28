@@ -1,9 +1,12 @@
 ﻿using SoundCloud.Audio;
 using SoundCloud.Common;
 using SoundCloud.Controller;
+using SoundCloud.Data;
+using SoundCloud.Model;
 using SoundCloud.Model.Explore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
@@ -36,16 +39,19 @@ namespace SoundCloud.View.ExploreViews
         #region Variables
 
         private ExploreLoadingCollection _exploreTracks;
+        private ObservableCollection<Track> _newtracks;
         private AppController _appController;
         private AudioManager _audioManager;
+        private DataManager _dataManager;
 
+        private String chosenCategory;
         private readonly object _padlock = new object();
 
         #endregion Variables
 
         #region Properties
 
-        public ExploreLoadingCollection Categories
+        public ExploreLoadingCollection CategoryTrack
         {
             get { return _exploreTracks; }
             set
@@ -53,7 +59,20 @@ namespace SoundCloud.View.ExploreViews
                 if (_exploreTracks != value)
                 {
                     _exploreTracks = value;
-                    NotifyPropertyChanged("Categories");
+                    NotifyPropertyChanged("CategoryTrack");
+                }
+            }
+        }
+
+        public String CategoryTitle
+        {
+            get { return chosenCategory; }
+            set
+            {
+                if(chosenCategory != value)
+                {
+                    chosenCategory = value;
+                    NotifyPropertyChanged("CategoryTitle");
                 }
             }
         }
@@ -66,24 +85,20 @@ namespace SoundCloud.View.ExploreViews
             _appController = AppController.ControllerInstance;
             _audioManager = _appController.AudioManager;
 
-            InitExploreItems();
-
-            //ClickCommand = new RelayCommand(ShowCategoryTracks);
+            this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-
-            this.InitializeComponent();
         }
 
-        public void InitExploreItems()
+        public async void InitExploreItems()
         {
             if (!_audioManager.IsPlaying)
                 _audioManager.EmptyPlaylist();
 
-            //_exploreTracks = new ExploreLoadingCollection(_appController.DataManager);
+            _exploreTracks = new ExploreLoadingCollection(_appController.DataManager, chosenCategory);
             //_exploreTracks.CollectionChanged += _exploreTracks_CollectionChanged;
-            //NotifyPropertyChanged("Categories");
+            NotifyPropertyChanged("CategoryTrack");
         }
 
         private void _exploreTracks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -171,6 +186,10 @@ namespace SoundCloud.View.ExploreViews
         /// handlers that cannot cancel the navigation request.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            chosenCategory = (String) e.Parameter;
+            CategoryTitle = chosenCategory;
+            NotifyPropertyChanged("CategoryTitle");
+            InitExploreItems();
             this.navigationHelper.OnNavigatedTo(e);
         }
 
