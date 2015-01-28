@@ -99,6 +99,9 @@
     <Compile Include="Exceptions\SoundCloudException.cs" />
     <Compile Include="Interfaces\IApplicationController.cs" />
     <Compile Include="Interfaces\IDataManager.cs" />
+    <Compile Include="Model\Explore\ExploreLoadingCollection.cs" />
+    <Compile Include="Model\Explore\ScExplore.cs" />
+    <Compile Include="Model\Explore\ScExploreCategory.cs" />
     <Compile Include="Model\Playlist.cs" />
     <Compile Include="Model\PlaylistTrack.cs" />
     <Compile Include="Model\ScStream.cs" />
@@ -117,6 +120,9 @@
     <Compile Include="Services\SoundCloudWrapper.cs" />
     <Compile Include="Services\Utils\JsonSerializer.cs" />
     <Compile Include="Services\Utils\Util.cs" />
+    <Compile Include="View\ExploreViews\ExplorePivot.xaml.cs">
+      <DependentUpon>ExplorePivot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -172,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\ExploreViews\ExplorePivot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -218,14 +228,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SQLite.Net.Async, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SQLite.Net.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLite.Net.Platform.WindowsPhoneApp81, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SQLite.Net.Platform.WindowsPhoneApp81.dll</HintPath>
-    </Reference>
     <Reference Include="SQLiteNetExtensions">
       <HintPath>..\packages\SQLiteNetExtensions.1.2.2\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\SQLiteNetExtensions.dll</HintPath>
     </Reference>
@@ -237,7 +239,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
+    <ProjectReference Include="..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net.Platform.WindowsPhoneApp81\SQLite.Net.Platform.WindowsPhoneApp81.csproj">
+      <Project>{38af8105-65b6-4a14-a258-1137d9e40ef1}</Project>
+      <Name>SQLite.Net.Platform.WindowsPhoneApp81</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Source\Repos\SQLite.Net-PCL\src\SQLite.Net\SQLite.Net.csproj">
       <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
       <Name>SQLite.Net</Name>
     </ProjectReference>
@@ -254,10 +260,14 @@
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, Version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
+    </SDKReference>
     <SDKReference Include="SQLite.WP81, Version=3.8.7.4">
       <Name>SQLite for Windows Phone 8.1</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

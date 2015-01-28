@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 using SQLite.Net;
-using SQLite.Net.Async;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.WinRT;
 

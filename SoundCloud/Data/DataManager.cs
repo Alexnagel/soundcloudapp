@@ -14,6 +14,7 @@ using SQLite.Net;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.WinRT;
 using SQLiteNetExtensions.Extensions;
+using SoundCloud.Model.Explore;
 
 namespace SoundCloud.Data
 {
@@ -28,6 +29,8 @@ namespace SoundCloud.Data
 
         private User _currentUser;
         private ScStream _stream;
+        private ScExplore _explore;
+        private ScExploreCategory _exploreCategory;
         #endregion Variables
 
         #region Properties
@@ -326,5 +329,85 @@ namespace SoundCloud.Data
         }
 
         #endregion Playlist
+
+        #region Explore
+
+        public async Task<List<String>> GetExploreCategories()
+        {
+            List<String> explore_list = new List<String>();
+            if (_explore == null)
+            {
+                _explore = await ScExplore.GetMusicExploreCategories();
+                _explore = await ScExplore.GetAudioExploreCategories();
+            }
+
+            foreach (string item in _explore.AudioCategories)
+            {
+                string new_item;
+                if (item.Contains("+"))
+                {
+                    new_item = item.Replace("+", " ");
+                    if (new_item.Contains("%26"))
+                    {
+                        new_item = new_item.Replace("%26", "&");
+                    }
+                    explore_list.Add(new_item);
+                    continue;
+                }
+                explore_list.Add(item);
+            }
+
+            foreach (string item in _explore.MusicCategories)
+            {
+                string new_item;
+                if (item.Contains("+"))
+                {
+                    new_item = item.Replace("+", " ");
+                    if (new_item.Contains("%26"))
+                    {
+                        new_item = new_item.Replace("%26", "&");
+                    }
+                    explore_list.Add(new_item);
+                    continue;
+                }
+
+                if (item.Contains("%26"))
+                {
+                    new_item = item.Replace("%26", "&");
+                    explore_list.Add(new_item);
+                    continue;
+                }
+                explore_list.Add(item);
+            }
+
+            return explore_list;
+        }
+
+
+        public async Task<ObservableCollection<Track>> GetCategoryStream()
+        {
+            if (_exploreCategory == null)
+                _exploreCategory = await ScExploreCategory.GetCategoryTracks();
+            return _exploreCategory.CategoryTracks;
+        }
+
+        public async Task<ObservableCollection<Track>> GetNextCatgoryTracks()
+        {
+            if (_exploreCategory != null)
+            {
+                ScExploreCategory temp = await ScExploreCategory.GetNextCatogoryTracks(_exploreCategory.NextHref);
+
+                ObservableCollection<Track> newItems = temp.CategoryTracks;
+                temp.CategoryTracks = new ObservableCollection<Track>(temp.CategoryTracks.Concat(_exploreCategory.CategoryTracks));
+                _exploreCategory = temp;
+
+                // Return new items for prepending in the class using it
+                return newItems;
+            }
+            else
+                return await GetCategoryStream();
+        }
+
+        #endregion Explore
     }
 }

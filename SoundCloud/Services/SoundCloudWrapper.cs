@@ -79,8 +79,8 @@ namespace SoundCloud.Services
             { ApiCall.Playlist,             new Uri("https://api.soundcloud.com/playlists/{0}.json") },
 
             // Explore 
-            {ApiCall.Explore,               new Uri("https://api-v2.soundcloud.com/explore/{0}")},
-            {ApiCall.ExploreCategories,     new Uri("https://api-v2.soundcloud.com/explore/categories")},
+            {ApiCall.Explore,               new Uri("https://api-v2.soundcloud.com/explore/categories")},
+            {ApiCall.ExploreCategories,     new Uri("https://api-v2.soundcloud.com/explore/{0}")},
 
             //Resolver
             { ApiCall.Resolve,              new Uri("https://api.soundcloud.com/resolve.json?url={0}") }
