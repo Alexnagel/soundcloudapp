@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="SoundCloud.View.PlaylistPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SoundCloud.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Background="#FFFF6600"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    x:Name="PageRoot">
+
+    <!-- Appbar -->
+    <Page.BottomAppBar>
+        <CommandBar Background="#FFC95000">
+            <AppBarButton Command="{Binding ToStreamCommand}" Label="Stream" AutomationProperties.Name="Stream">
+                <Path Width="25" Height="20" Stretch="Uniform" Fill="White" Data="F1 M 19,20.5833L 57,20.5833L 57,26.9167L 19,26.9167L 19,20.5833 Z M 19,30.0833L 57,30.0833L 57,36.4167L 19,36.4167L 19,30.0833 Z M 19,39.5833L 57,39.5833L 57,45.9167L 19,45.9167L 19,39.5833 Z M 19,49.0833L 57,49.0833L 57,55.4167L 19,55.4167L 19,49.0833 Z "/>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+    <!-- end Appbar -->
+    
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Panel -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="SOUNDCLOUD" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="{Binding Playlist.Title}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" MaxLines="2"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+            <ListView x:Name="PlayListView" ItemsSource="{Binding Playlist.Tracks}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <local:TrackListItem DataContext="{Binding}" CollectionId="{Binding CollectionItem.Id, ElementName=PageRoot}" PlaylistId="{Binding Playlist.Id, ElementName=PageRoot}"  Width="{Binding ElementName=PlayListView,Path=ActualWidth}" Margin="0,0,0,10"></local:TrackListItem>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>
