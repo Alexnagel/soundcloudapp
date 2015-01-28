@@ -2,7 +2,6 @@
 using Windows.UI.Xaml.Media.Imaging;
 using SQLite.Net.Attributes;
 
-
 namespace BackgroundAudio.PlayQueue
 {
 

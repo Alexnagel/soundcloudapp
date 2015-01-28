@@ -11,7 +11,7 @@ using SoundCloud.Interfaces;
 
 namespace SoundCloud.Model.Explore
 {
-    class ExploreLoadingCollection : ObservableCollection<Track>, ISupportIncrementalLoading
+    public class ExploreLoadingCollection : ObservableCollection<Track>, ISupportIncrementalLoading
     {
         private IDataManager _dataManager;
         private bool _hasMoreItems;

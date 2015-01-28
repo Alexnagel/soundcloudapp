@@ -5,7 +5,6 @@ using System.ComponentModel;
 using Windows.UI.Xaml.Controls;
 using SoundCloud.Audio;
 using SoundCloud.Controller;
-using SoundCloud.Data;
 using SoundCloud.Model;
 
 namespace SoundCloud.View.StreamViews
@@ -64,7 +63,7 @@ namespace SoundCloud.View.StreamViews
             // Start the stream collection
             _streamTracks = new StreamLoadingCollection(_appController.DataManager);
             _streamTracks.CollectionChanged += _streamTracks_CollectionChanged;
-            NotifyPropertyChanged("StreamTracks");
+            //NotifyPropertyChanged("StreamTracks");
         }
 
         void _streamTracks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

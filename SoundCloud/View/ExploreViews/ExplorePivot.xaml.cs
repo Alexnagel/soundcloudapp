@@ -1,22 +1,9 @@
-﻿using SoundCloud.Audio;
-using SoundCloud.Controller;
-using SoundCloud.Data;
-using SoundCloud.Model.Explore;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using SoundCloud.Audio;
+using SoundCloud.Controller;
+using SoundCloud.Model.Explore;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -28,7 +15,6 @@ namespace SoundCloud.View.ExploreViews
 
         private ExploreLoadingCollection _exploreTracks;
         private AppController _appController;
-        private DataManager _dataManager;
         private AudioManager _audioManager;
 
         private readonly object _padlock = new object();
@@ -37,7 +23,7 @@ namespace SoundCloud.View.ExploreViews
 
         #region Properties
 
-        private ExploreLoadingCollection Categories
+        public ExploreLoadingCollection Categories
         {
             get { return _exploreTracks; }
             set
@@ -54,13 +40,8 @@ namespace SoundCloud.View.ExploreViews
 
         public ExplorePivot()
         {
-            DataContext = this;
-
             _appController = AppController.ControllerInstance;
-            _dataManager = _appController.DataManager;
-
             _audioManager = _appController.AudioManager;
-            _audioManager.UserAuth = _dataManager.GetUserAuthKey();
 
             InitExploreItems();
 
@@ -74,12 +55,12 @@ namespace SoundCloud.View.ExploreViews
             if (!_audioManager.IsPlaying)
                 _audioManager.EmptyPlaylist();
 
-            _exploreTracks = new ExploreLoadingCollection(_dataManager);
+            _exploreTracks = new ExploreLoadingCollection(_appController.DataManager);
             _exploreTracks.CollectionChanged += _exploreTracks_CollectionChanged;
             NotifyPropertyChanged("Categories");
         }
 
-        private void _exploreTracks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void _exploreTracks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             lock (_padlock)
             {
