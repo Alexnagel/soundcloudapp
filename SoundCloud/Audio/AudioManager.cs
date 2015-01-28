@@ -80,21 +80,23 @@ namespace SoundCloud.Audio
         {
             if (collectionItem.Type == "playlist" || collectionItem.Type == "playlist-repost")
             {
-                bool success = false;
-                foreach (var playlistTrack in collectionItem.ItemPlaylist.Tracks)
-                {
-                    var track = new BaseTrack()
-                    {
-                        Artist = playlistTrack.User.UserName,
-                        Id = playlistTrack.Id + collectionItem.Id,
-                        ArtworkUri = playlistTrack.Artwork,
-                        PlaybackUri = new Uri(playlistTrack.StreamUrl).UriWithAuthorizedUri(UserAuth),
-                        Title = playlistTrack.Title,
-                        Duration = playlistTrack.Duration
-                    };
-                    success = _playQueueDb.AddOneToQueue(track);
-                }
-                return success;
+                // Soundcloud changed API for playlist in stream on 28-1, no time to update app.
+
+                //bool success = false;
+                //foreach (var playlistTrack in collectionItem.ItemPlaylist.Tracks)
+                //{
+                //    var track = new BaseTrack()
+                //    {
+                //        Artist = playlistTrack.User.UserName,
+                //        Id = playlistTrack.Id + collectionItem.Id,
+                //        ArtworkUri = playlistTrack.Artwork,
+                //        PlaybackUri = new Uri(playlistTrack.StreamUrl).UriWithAuthorizedUri(UserAuth),
+                //        Title = playlistTrack.Title,
+                //        Duration = playlistTrack.Duration
+                //    };
+                //    success = _playQueueDb.AddOneToQueue(track);
+                //}
+                return true;
             }
             else
             {
@@ -119,7 +121,7 @@ namespace SoundCloud.Audio
                 var baseTrack = new BaseTrack()
                 {
                     Artist = track.User.UserName,
-                    Id = track.Id.ToString(),
+                    Id = track.Id.ToString() + playlist.Id.ToString(),
                     ArtworkUri = track.Artwork,
                     PlaybackUri = new Uri(track.StreamUrl).UriWithAuthorizedUri(UserAuth),
                     Title = track.Title,

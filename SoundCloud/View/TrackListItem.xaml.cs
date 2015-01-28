@@ -19,8 +19,23 @@ namespace SoundCloud.View
             typeof(string), typeof(TrackListItem), new PropertyMetadata(string.Empty));
         #endregion Data Binding
 
-        public int PlaylistId { get; set; }
-        public string CollectionId { get; set; }
+        public int PlaylistId
+        {
+            get { return (int)this.GetValue(PlaylistIdProperty); }
+            set
+            {
+                this.SetValue(PlaylistIdProperty, value);
+            }
+        }
+
+        public string CollectionId
+        {
+            get { return (string) this.GetValue(CollectionIdProperty); }
+            set
+            {
+                this.SetValue(CollectionIdProperty, value);
+            }
+        }
 
         private Track _trackItem;
         private Track TrackItem
@@ -34,6 +49,7 @@ namespace SoundCloud.View
         }
 
         private readonly AppController _appController;
+        private string _trackId;
 
         public TrackListItem()
         {
@@ -47,22 +63,18 @@ namespace SoundCloud.View
         {
             _appController.AudioManager.TrackLoaded += TrackLoadedHandler;
 
-            string trackId = TrackItem.Id.ToString();
+            _trackId = TrackItem.Id.ToString();
             if (PlaylistId != -1)
-                trackId += PlaylistId.ToString();
+                _trackId += PlaylistId.ToString();
             if (!String.IsNullOrEmpty(CollectionId))
-                trackId += CollectionId;
+                _trackId += CollectionId;
 
-            _appController.AudioManager.PlayTrack(trackId);
+            _appController.AudioManager.PlayTrack(_trackId);
         }
 
         private void TrackLoadedHandler(string id)
         {
-            string trackId = TrackItem.Id.ToString();
-            if (PlaylistId != -1)
-                trackId += PlaylistId.ToString();
-
-            if (trackId == id)
+            if (_trackId == id)
             {
                 _appController.AudioManager.TrackLoaded -= TrackLoadedHandler;
 

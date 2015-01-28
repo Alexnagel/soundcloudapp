@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Core;
@@ -51,7 +49,7 @@ namespace SoundCloud.Model
                         {
                             foreach (var streamItem in result)
                             {
-                                if (!this.Contains(streamItem) && streamItem.Type != "playlist")
+                                if (!this.Contains(streamItem) && (streamItem.Type != "playlist" || streamItem.Type != "playlist-repost"))
                                     this.Add(streamItem);
                             }
                         }).AsTask());
