@@ -140,7 +140,7 @@ namespace SoundCloud.View
             _showPlayPath = Visibility.Collapsed;
             _showPausePath = Visibility.Visible;
             _isPlaying = true;
-
+            _audioManager.IsPlaying = true;
             this.InitializeComponent();
             SetProgressbar();
 

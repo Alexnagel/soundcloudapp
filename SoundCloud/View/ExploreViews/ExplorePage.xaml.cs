@@ -39,10 +39,8 @@ namespace SoundCloud.View.ExploreViews
         #region Variables
 
         private ExploreLoadingCollection _exploreTracks;
-        private ObservableCollection<Track> _newtracks;
         private AppController _appController;
         private AudioManager _audioManager;
-        private DataManager _dataManager;
 
         private String chosenCategory;
         private readonly object _padlock = new object();

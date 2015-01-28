@@ -7,6 +7,7 @@ using BackgroundAudioTask;
 using SoundCloud.Common;
 using SoundCloud.Model;
 using SoundCloud.Services.Utils;
+using System.ComponentModel;
 
 namespace SoundCloud.Audio
 {
@@ -27,6 +28,14 @@ namespace SoundCloud.Audio
         public bool IsPlaying
         {
             get { return _isPlaying; }
+            set
+            {
+                if(_isPlaying != value)
+                {
+                    _isPlaying = value;
+                    NotifyPropertyChanged("IsPlaying");
+                }
+            }
         }
 
         public bool HasTrackOpen
@@ -251,5 +260,20 @@ namespace SoundCloud.Audio
         }
 
         #endregion Background Media Handlers
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Used to notify the page that a data context property changed
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
     }
 }

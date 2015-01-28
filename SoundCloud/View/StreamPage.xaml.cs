@@ -58,6 +58,7 @@ namespace SoundCloud.View
             ShowNowPlaying = AudioManager.IsPlaying ? Visibility.Visible : Visibility.Collapsed;
             //ShowNowPlaying = Visibility.Visible;
             AudioManager.TrackLoaded += TrackLoaded;
+            this.BottomAppBar.DataContext = this;
         }
 
         private void TrackLoaded(string id)
@@ -99,5 +100,6 @@ namespace SoundCloud.View
         }
 
         #endregion
+
     }
 }
