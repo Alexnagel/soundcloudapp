@@ -103,6 +103,7 @@ namespace BackgroundAudioTask
             {
                 //save state
                 ApplicationSettingsHelper.SaveSettingsValue(Constants.CurrentTrack, audioManager.CurrentTrack.Id);
+                ApplicationSettingsHelper.SaveSettingsValue("queuetype", audioManager.CurrentTrack.Type);
                 ApplicationSettingsHelper.SaveSettingsValue(Constants.Position, BackgroundMediaPlayer.Current.Position.ToString());
                 ApplicationSettingsHelper.SaveSettingsValue(Constants.BackgroundTaskState, Constants.BackgroundTaskCancelled);
                 ApplicationSettingsHelper.SaveSettingsValue(Constants.AppState, Enum.GetName(typeof(ForegroundAppStatus), _foregroundAppStatus));
@@ -199,6 +200,7 @@ namespace BackgroundAudioTask
                     //If the task was cancelled we would have saved the current track and its position. We will try playback from there
                     var currentTrackId = ApplicationSettingsHelper.ReadResetSettingsValue(Constants.CurrentTrack);
                     var currenttrackposition = ApplicationSettingsHelper.ReadResetSettingsValue(Constants.Position);
+                    var currentQueueType = (QueueType)ApplicationSettingsHelper.ReadResetSettingsValue("queuetype");
 
                     if (currentTrackId != null)
                     {
@@ -206,12 +208,12 @@ namespace BackgroundAudioTask
                         if (currenttrackposition == null)
                         {
                             // play from start if we dont have position
-                            audioManager.PlayTrack((string)currentTrackId, TimeSpan.FromSeconds(0));
+                            audioManager.PlayTrack((string)currentTrackId, TimeSpan.FromSeconds(0), currentQueueType);
                         }
                         else
                         {
                             // play from exact position otherwise
-                            audioManager.PlayTrack((string)currentTrackId, TimeSpan.Parse((string)currenttrackposition));
+                            audioManager.PlayTrack((string)currentTrackId, TimeSpan.Parse((string)currenttrackposition), currentQueueType);
                         }
                     }
                     else
@@ -235,9 +237,9 @@ namespace BackgroundAudioTask
             }
         }
 
-        public void PlayTrackById(string id)
+        public void PlayTrackById(string id, QueueType type)
         {
-            audioManager.PlayTrack(id, TimeSpan.FromSeconds(0));
+            audioManager.PlayTrack(id, TimeSpan.FromSeconds(0), type);
 
             // Send message of play to foreground 
             var message = new ValueSet {{Constants.StartPlayback, ""}};
@@ -341,7 +343,7 @@ namespace BackgroundAudioTask
                 switch (key.ToLower())
                 {
                     case Constants.StartPlaybackWithId:
-                        PlayTrackById((string)e.Data["trackid"]);
+                        PlayTrackById((string)e.Data["trackid"], (QueueType)e.Data["queuetype"]);
                         break;
                     case Constants.StartPlayback:
                         PlayTrack();

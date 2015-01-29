@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using BackgroundAudio.PlayQueue;
 using SoundCloud.Common;
 using System;
 using Windows.UI.Xaml.Controls;
@@ -51,9 +53,23 @@ namespace SoundCloud.View
             }
         }
 
+        public QueueType QueueType
+        {
+            get { return _queueType; }
+            set
+            {
+                if (_queueType != value)
+                {
+                    _queueType = value;
+                    NotifyPropertyChanged("QueueType");
+                }
+            }
+        }
+
         private CollectionItem _collectionItem;
         private Playlist _playlist;
         private AppController _appController;
+        private QueueType _queueType; 
 
         public RelayCommand ToStreamCommand { get; private set; }
 
@@ -114,17 +130,20 @@ namespace SoundCloud.View
             if (e.Parameter != null)
             {
                 object param = e.Parameter;
+                _queueType = QueueType.Playlist;
                 if (param.GetType() == typeof (CollectionItem))
                 {
                     CollectionItem = (CollectionItem) param;
                     Playlist = CollectionItem.ItemPlaylist;
+                    _queueType = QueueType.Stream;
                 }
                 else if (param.GetType() == typeof (Playlist))
                 {
                     Playlist = (Playlist) param;
-                    _appController.AudioManager.EmptyPlaylist();
-                    _appController.AudioManager.AddToPlaylist(Playlist);
                 }
+
+                _appController.AudioManager.EmptyPlaylist(_queueType);
+                _appController.AudioManager.AddToPlaylist(Playlist, QueueType.Playlist);
             }
 
             this.navigationHelper.OnNavigatedTo(e);

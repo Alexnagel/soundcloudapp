@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using SoundCloud.Common;
 using SoundCloud.Controller;
+using SoundCloud.View.UserViews;
 
 namespace SoundCloud.View
 {
@@ -115,6 +116,7 @@ namespace SoundCloud.View
         public RelayCommand PreviousTrackCommand { get; private set; }
         public RelayCommand PlayPauseCommand { get; private set; }
         public RelayCommand ToStreamCommand { get; private set; }
+        public RelayCommand ToUserCommand { get; private set; }
 
         #endregion Relaycommands
 
@@ -258,6 +260,11 @@ namespace SoundCloud.View
             _appController.NavigateToPage(typeof(StreamPage));
         }
 
+        private void NavigateToUser()
+        {
+            _appController.NavigateToPage(typeof(UserPage), CurrentTrack.ArtistId);
+        }
+
         private void initRelayCommands()
         {
             ScrubChangeCommand = new RelayCommand(ScrubChange);
@@ -265,6 +272,7 @@ namespace SoundCloud.View
             PreviousTrackCommand = new RelayCommand(PreviousTrack);
             PlayPauseCommand = new RelayCommand(PlayPauseTrack);
             ToStreamCommand = new RelayCommand(NavigateToStream);
+            ToUserCommand = new RelayCommand(NavigateToUser);
         }
 
         #region INotifyPropertyChanged Members

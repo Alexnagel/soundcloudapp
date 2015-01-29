@@ -162,6 +162,9 @@
     <Compile Include="View\TrackListItem.xaml.cs">
       <DependentUpon>TrackListItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UserViews\UserPage.xaml.cs">
+      <DependentUpon>UserPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserViews\UserView.xaml.cs">
       <DependentUpon>UserView.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\empty_image.jpg" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SlashScreen.scale-140.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
@@ -236,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TrackListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserViews\UserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

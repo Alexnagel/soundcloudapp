@@ -1,7 +1,9 @@
 ﻿using System;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using BackgroundAudio.PlayQueue;
 using SoundCloud.Controller;
 using SoundCloud.Model;
 using SoundCloud.Services.Events;
@@ -17,7 +19,19 @@ namespace SoundCloud.View
             typeof(int), typeof(TrackListItem), new PropertyMetadata(-1));
         public static readonly DependencyProperty CollectionIdProperty = DependencyProperty.Register("CollectionId",
             typeof(string), typeof(TrackListItem), new PropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty QueueTypeProperty = DependencyProperty.Register("QueueType",
+            typeof(QueueType), typeof(TrackListItem), new PropertyMetadata(QueueType.None));
         #endregion Data Binding
+
+        public QueueType QueueType
+        {
+            get { return (QueueType)this.GetValue(QueueTypeProperty); }
+            set
+            {
+                this.SetValue(QueueTypeProperty, value);
+            }
+        }
 
         public int PlaylistId
         {
@@ -69,7 +83,15 @@ namespace SoundCloud.View
             if (!String.IsNullOrEmpty(CollectionId))
                 _trackId += CollectionId;
 
-            _appController.AudioManager.PlayTrack(_trackId);
+            if (_trackItem.Streamable)
+                _appController.AudioManager.PlayTrack(_trackId, QueueType);
+            else
+            {
+                var msgBox =
+                    new MessageDialog(
+                        "We aren't able to play this song, the owner has chosen to make it non-streamable.", "Playback not possible");
+                msgBox.ShowAsync();
+            }
         }
 
         private void TrackLoadedHandler(string id)

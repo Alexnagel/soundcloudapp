@@ -23,6 +23,14 @@
             <ColumnDefinition Width="105"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        
+        <interactivity:Interaction.Behaviors>
+            <core:EventTriggerBehavior EventName="Tapped">
+                <core:InvokeCommandAction Command="{Binding ElementName=Control, Path=TapCommand}" CommandParameter="{Binding Id}"/>
+            </core:EventTriggerBehavior>
+        </interactivity:Interaction.Behaviors>
+        
+        
         <Image Source="{Binding AvatarUri}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Left" Height="70" Margin="10,10,0,0" VerticalAlignment="Top" Width="70"/>
 
         <Grid Grid.Column="1" Grid.Row="0" x:Name="MetaGrid">

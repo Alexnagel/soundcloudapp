@@ -42,7 +42,7 @@
             <ListView x:Name="PlayListView" ItemsSource="{Binding Playlist.Tracks}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <local:TrackListItem DataContext="{Binding}" CollectionId="{Binding CollectionItem.Id, ElementName=PageRoot}" PlaylistId="{Binding Playlist.Id, ElementName=PageRoot}"  Width="{Binding ElementName=PlayListView,Path=ActualWidth}" Margin="0,0,0,10"></local:TrackListItem>
+                        <local:TrackListItem DataContext="{Binding}" QueueType="{Binding QueueType, ElementName=PageRoot}" CollectionId="{Binding CollectionItem.Id, ElementName=PageRoot}" PlaylistId="{Binding Playlist.Id, ElementName=PageRoot}"  Width="{Binding ElementName=PlayListView,Path=ActualWidth}" Margin="0,0,0,10"></local:TrackListItem>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

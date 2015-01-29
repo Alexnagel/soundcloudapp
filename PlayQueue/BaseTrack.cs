@@ -11,9 +11,12 @@ namespace BackgroundAudio.PlayQueue
         public int dbId { get; set; }
         public string Id { get; set; }
         public string Artist { get; set; }
+        public int ArtistId { get; set; }
         public string Title { get; set; }
         public string ArtworkUri { get; set; }
         public double Duration { get; set; }
+        public QueueType Type { get; set; }
+
 
         [Default(true, false)]
         public bool IsPlaying { get; set; }
@@ -45,8 +48,10 @@ namespace BackgroundAudio.PlayQueue
         {
             get
             {
-                if (_artworkImage == null)
+                if (_artworkImage == null && !String.IsNullOrEmpty(ArtworkUri))
                     _artworkImage = new BitmapImage(new Uri(ArtworkUri));
+                else
+                    _artworkImage = new BitmapImage(new Uri(@"ms-appx://Assets/empty_image.jpg", UriKind.Absolute));
                 return _artworkImage;
             }
         }
@@ -58,8 +63,13 @@ namespace BackgroundAudio.PlayQueue
             {
                 if (_bigArtworkImage == null)
                 {
-                    string uri = ArtworkUri.Replace("large", "t500x500");
-                    _bigArtworkImage = new BitmapImage(new Uri(uri));
+                    if (String.IsNullOrEmpty(ArtworkUri))
+                        return new BitmapImage();
+                    else
+                    {
+                        string uri = ArtworkUri.Replace("large", "t500x500");
+                        _bigArtworkImage = new BitmapImage(new Uri(uri));
+                    }
                 }
                 return _bigArtworkImage;
             }

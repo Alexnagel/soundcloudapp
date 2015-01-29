@@ -3,6 +3,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Windows.UI.Xaml.Controls;
+using BackgroundAudio.PlayQueue;
 using SoundCloud.Audio;
 using SoundCloud.Controller;
 using SoundCloud.Model;
@@ -57,7 +58,7 @@ namespace SoundCloud.View.StreamViews
             if (!_audioManager.IsPlaying)
             {
                 // Empty the current playlist
-                _audioManager.EmptyPlaylist();
+                _audioManager.EmptyPlaylist(QueueType.Stream);
             }
 
             // Start the stream collection
@@ -70,7 +71,7 @@ namespace SoundCloud.View.StreamViews
         {
             lock (_padlock)
             {
-                _audioManager.AddToPlaylist(_streamTracks[_streamTracks.Count - 1]);
+                _audioManager.AddToPlaylist(_streamTracks[_streamTracks.Count - 1], QueueType.Stream);
             }
         }
 

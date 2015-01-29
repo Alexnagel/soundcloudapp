@@ -49,16 +49,16 @@
                    TextAlignment="Center" 
                    VerticalAlignment="Center" 
                    Margin="0"
-                   Visibility="Collapsed" FontSize="14">
+                   FontSize="14">
                     <interactivity:Interaction.Behaviors>
-                        <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=TrackList}" Value="0">
+                        <core:DataTriggerBehavior Binding="{Binding MeTracks.Count}" Value="0">
                             <core:ChangePropertyAction PropertyName="Visibility">
                                 <core:ChangePropertyAction.Value>
                                     <Visibility>Visible</Visibility>
                                 </core:ChangePropertyAction.Value>
                             </core:ChangePropertyAction>
                         </core:DataTriggerBehavior>
-                        <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=TrackList}" ComparisonCondition="GreaterThanOrEqual" Value="1">
+                        <core:DataTriggerBehavior Binding="{Binding MeTracks.Count}" ComparisonCondition="GreaterThan" Value="1">
                             <core:ChangePropertyAction PropertyName="Visibility">
                                 <core:ChangePropertyAction.Value>
                                     <Visibility>Collapsed</Visibility>
@@ -70,7 +70,7 @@
                     <ListView Name="TrackList" ItemsSource="{Binding MeTracks}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <view:TrackListItem DataContext="{Binding}"  Width="{Binding ElementName=TrackList, Path=ActualWidth}" Margin="0,0,0,10"></view:TrackListItem>
+                                <view:TrackListItem QueueType="User" DataContext="{Binding}"  Width="{Binding ElementName=TrackList, Path=ActualWidth}" Margin="0,0,0,10"></view:TrackListItem>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -89,16 +89,16 @@
                    TextAlignment="Center" 
                    VerticalAlignment="Center" 
                    Margin="0"
-                   Visibility="Collapsed" FontSize="14">
+                   FontSize="14">
                     <interactivity:Interaction.Behaviors>
-                        <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=FollowersList}" Value="0">
+                        <core:DataTriggerBehavior Binding="{Binding Path=MeFollowersUsers.Count}" Value="0">
                             <core:ChangePropertyAction PropertyName="Visibility">
                                 <core:ChangePropertyAction.Value>
                                     <Visibility>Visible</Visibility>
                                 </core:ChangePropertyAction.Value>
                             </core:ChangePropertyAction>
                         </core:DataTriggerBehavior>
-                        <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=FollowersList}" ComparisonCondition="GreaterThanOrEqual" Value="1">
+                        <core:DataTriggerBehavior Binding="{Binding Path=MeFollowersUsers.Count}" ComparisonCondition="GreaterThanOrEqual" Value="1">
                             <core:ChangePropertyAction PropertyName="Visibility">
                                 <core:ChangePropertyAction.Value>
                                     <Visibility>Collapsed</Visibility>
@@ -129,16 +129,16 @@
                    TextAlignment="Center" 
                    VerticalAlignment="Center" 
                    Margin="0"
-                   Visibility="Collapsed" FontSize="14">
+                   FontSize="14">
                     <interactivity:Interaction.Behaviors>
-                        <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=FollowingList}" Value="0">
+                        <core:DataTriggerBehavior Binding="{Binding Path=MeFollowingUsers.Count}" Value="0">
                             <core:ChangePropertyAction PropertyName="Visibility">
                                 <core:ChangePropertyAction.Value>
                                     <Visibility>Visible</Visibility>
                                 </core:ChangePropertyAction.Value>
                             </core:ChangePropertyAction>
                         </core:DataTriggerBehavior>
-                        <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=FollowingList}" ComparisonCondition="GreaterThanOrEqual" Value="1">
+                        <core:DataTriggerBehavior Binding="{Binding Path=MeFollowingUsers.Count}" ComparisonCondition="GreaterThanOrEqual" Value="1">
                             <core:ChangePropertyAction PropertyName="Visibility">
                                 <core:ChangePropertyAction.Value>
                                     <Visibility>Collapsed</Visibility>

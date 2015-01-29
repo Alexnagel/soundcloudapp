@@ -41,6 +41,7 @@ namespace BackgroundAudioTask
 
         private readonly MediaPlayer _mediaPlayer;
         private readonly SyncPlayQueue _playQueue;
+        private QueueType _queueType;
 
         #endregion Variables
 
@@ -58,15 +59,20 @@ namespace BackgroundAudioTask
 
         #region Playlist Methods
 
+        public void SetQueueType(QueueType type)
+        {
+            _queueType = type;
+        }
+
         public void NextTrack()
         {
-            _trackToPlay = _playQueue.GetNext(CurrentTrack.dbId);
+            _trackToPlay = _playQueue.GetNext(CurrentTrack.dbId, _queueType);
             PlayTrack();
         }
 
         public void PreviousTrack()
         {
-            _trackToPlay = _playQueue.GetPrevious(CurrentTrack.dbId);
+            _trackToPlay = _playQueue.GetPrevious(CurrentTrack.dbId, _queueType);
             PlayTrack();
         }
 
@@ -78,6 +84,7 @@ namespace BackgroundAudioTask
                     _playQueue.SetTrackPlaying(CurrentTrack.dbId, false);
 
                 _playQueue.SetTrackPlaying(_trackToPlay.dbId, true);
+                _queueType = _trackToPlay.Type;
 
                 BackgroundMediaPlayer.Current.Volume = 0;
                 BackgroundMediaPlayer.Current.AutoPlay = false;
@@ -85,12 +92,12 @@ namespace BackgroundAudioTask
             }
         }
 
-        public void PlayTrack(string trackId, TimeSpan startPosition)
+        public void PlayTrack(string trackId, TimeSpan startPosition, QueueType type)
         {
             BaseTrack track;
             try
             {
-                track = _playQueue.GetTrack(trackId);
+                track = _playQueue.GetTrack(trackId, type);
             }
             catch (ArgumentNullException e)
             {

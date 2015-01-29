@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
+using BackgroundAudio.PlayQueue;
 using SoundCloud.Audio;
 using SoundCloud.Controller;
 using SoundCloud.Model;
@@ -38,7 +39,7 @@ namespace SoundCloud.View.StreamViews
         {
             _appController.AudioManager.TrackLoaded += TrackLoadedHandler;
 
-            _appController.AudioManager.PlayTrack(CollectionItem.Id);
+            _appController.AudioManager.PlayTrack(CollectionItem.Id, QueueType.Stream);
         }
 
         private void TrackLoadedHandler(string id)

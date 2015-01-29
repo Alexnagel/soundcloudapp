@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.Foundation.Collections;
 using Windows.Media.Playback;
 using BackgroundAudio.PlayQueue;
@@ -63,20 +65,20 @@ namespace SoundCloud.Audio
             return _playQueueDb.GetCurrentTrack();
         }
 
-        public bool EmptyPlaylist()
+        public bool EmptyPlaylist(QueueType type)
         {
-            return _playQueueDb.EmptyQueue();
+            return _playQueueDb.EmptyQueue(type);
         }
 
-        public void SetPlaylist(ObservableCollection<CollectionItem> playlist)
+        public void SetPlaylist(ObservableCollection<CollectionItem> playlist, QueueType type)
         {
             foreach (var collectionItem in playlist)
             {
-                AddToPlaylist(collectionItem);
+                AddToPlaylist(collectionItem, type);
             }
         }
 
-        public bool AddToPlaylist(CollectionItem collectionItem)
+        public bool AddToPlaylist(CollectionItem collectionItem, QueueType type)
         {
             if (collectionItem.Type == "playlist" || collectionItem.Type == "playlist-repost")
             {
@@ -103,47 +105,74 @@ namespace SoundCloud.Audio
                 var track = new BaseTrack()
                 {
                     Artist = collectionItem.ItemTrack.User.UserName,
+                    ArtistId = collectionItem.ItemTrack.User.Id,
                     Id = collectionItem.Id,
                     ArtworkUri = collectionItem.ItemTrack.Artwork,
                     PlaybackUri = new Uri(collectionItem.ItemTrack.StreamUrl).UriWithAuthorizedUri(UserAuth),
                     Title = collectionItem.ItemTrack.Title,
-                    Duration = collectionItem.ItemTrack.Duration
+                    Duration = collectionItem.ItemTrack.Duration,
+                    Type = type
                 };
                 return _playQueueDb.AddOneToQueue(track);
             }
         }
 
-        public bool AddToPlaylist(Playlist playlist)
+        public bool AddToPlaylist(Playlist playlist, QueueType type)
         {
             bool success = false;
-            foreach (var track in playlist.Tracks)
+            foreach (var track in playlist.Tracks.Where(t => t.Streamable))
             {
                 var baseTrack = new BaseTrack()
                 {
                     Artist = track.User.UserName,
+                    ArtistId = track.User.Id,
                     Id = track.Id.ToString() + playlist.Id.ToString(),
                     ArtworkUri = track.Artwork,
                     PlaybackUri = new Uri(track.StreamUrl).UriWithAuthorizedUri(UserAuth),
                     Title = track.Title,
-                    Duration = track.Duration
+                    Duration = track.Duration,
+                    Type = type
                 };
                 success = _playQueueDb.AddOneToQueue(baseTrack);
             }
             return success;
         }
 
-        public bool AddToPlaylist(Track track)
+        public bool AddToPlaylist(Track track, QueueType type)
         {
             var baseTrack = new BaseTrack()
             {
                 Artist = track.User.UserName,
+                ArtistId = track.User.Id,
                 Id = track.Id.ToString(),
                 ArtworkUri = track.Artwork,
                 PlaybackUri = new Uri(track.StreamUrl).UriWithAuthorizedUri(UserAuth),
                 Title = track.Title,
-                Duration = track.Duration
+                Duration = track.Duration,
+                Type = type
             };
             return _playQueueDb.AddOneToQueue(baseTrack);
+        }
+
+        public bool AddToPlaylist(List<Track> tracks, QueueType type)
+        {
+            bool success = false;
+            foreach (var track in tracks.Where(t => t.Streamable))
+            {
+                var baseTrack = new BaseTrack()
+                {
+                    Artist = track.User.UserName,
+                    ArtistId = track.User.Id,
+                    Id = track.Id.ToString(),
+                    ArtworkUri = track.Artwork,
+                    PlaybackUri = new Uri(track.StreamUrl).UriWithAuthorizedUri(UserAuth),
+                    Title = track.Title,
+                    Duration = track.Duration,
+                    Type = type
+                };
+                success = _playQueueDb.AddOneToQueue(baseTrack);
+            }
+            return success;
         }
 
         #region Forground Media Handlers
@@ -168,12 +197,13 @@ namespace SoundCloud.Audio
             BackgroundMediaPlayer.SendMessageToBackground(message);
         }
 
-        public void PlayTrack(string id)
+        public void PlayTrack(string id, QueueType type)
         {
             // Send message to background for playback with song id
             var message = new ValueSet();
             message.Add(Constants.StartPlaybackWithId, "");
             message.Add("trackid", id);
+            message.Add("queuetype", (int)type);
             BackgroundMediaPlayer.SendMessageToBackground(message);
             
             // Set isPlaying to true

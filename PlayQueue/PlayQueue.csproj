@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="BaseTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueType.cs" />
     <Compile Include="SyncPlayQueue.cs" />
   </ItemGroup>
   <ItemGroup>

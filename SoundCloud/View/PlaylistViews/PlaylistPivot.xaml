@@ -17,17 +17,16 @@
         <TextBlock Text="You have no playlists" 
                    TextAlignment="Center" 
                    VerticalAlignment="Center" 
-                   Margin="0"
-                   Visibility="Collapsed">
+                   Margin="0">
             <i:Interaction.Behaviors>
-                <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=PlaylistList}" Value="0">
+                <core:DataTriggerBehavior Binding="{Binding Path=Playlists.Count}" ComparisonCondition="Equal" Value="0">
                     <core:ChangePropertyAction PropertyName="Visibility">
                         <core:ChangePropertyAction.Value>
                             <Visibility>Visible</Visibility>
                         </core:ChangePropertyAction.Value>
                     </core:ChangePropertyAction>
                 </core:DataTriggerBehavior>
-                <core:DataTriggerBehavior Binding="{Binding Items.Count, ElementName=PlaylistList}" ComparisonCondition="GreaterThanOrEqual" Value="1">
+                <core:DataTriggerBehavior Binding="{Binding Path=Playlists.Count}" ComparisonCondition="GreaterThanOrEqual" Value="1">
                     <core:ChangePropertyAction PropertyName="Visibility">
                         <core:ChangePropertyAction.Value>
                             <Visibility>Collapsed</Visibility>

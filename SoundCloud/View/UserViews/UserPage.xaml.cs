@@ -1,110 +1,45 @@
-﻿using BackgroundAudio.PlayQueue;
-using SoundCloud.Audio;
+﻿using System.ComponentModel;
 using SoundCloud.Common;
-using SoundCloud.Controller;
-using SoundCloud.Model.Explore;
 using System;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace SoundCloud.View.ExploreViews
+// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+using SoundCloud.Model;
+
+namespace SoundCloud.View.UserViews
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ExplorePage : Page
+    public sealed partial class UserPage : Page, INotifyPropertyChanged
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        #region Variables
-
-        private ExploreLoadingCollection _exploreTracks;
-        private AppController _appController;
-        private AudioManager _audioManager;
-
-        private String chosenCategory;
-        private readonly object _padlock = new object();
-
-        #endregion Variables
-
-        #region Properties
-
-        public ExploreLoadingCollection CategoryTrack
+        public MePivot UserView
         {
-            get { return _exploreTracks; }
+            get { return _userView; }
             set
             {
-                if (_exploreTracks != value)
+                if (value != _userView)
                 {
-                    _exploreTracks = value;
-                    NotifyPropertyChanged("CategoryTrack");
+                    _userView = value;
+                    NotifyPropertyChanged("ThisUserId");
                 }
             }
         }
 
-        public String CategoryTitle
+        private MePivot _userView;
+
+        public UserPage()
         {
-            get { return chosenCategory; }
-            set
-            {
-                if(chosenCategory != value)
-                {
-                    chosenCategory = value;
-                    NotifyPropertyChanged("CategoryTitle");
-                }
-            }
-        }
-
-        #endregion Properties
-
-        public ExplorePage()
-        {
-
-            _appController = AppController.ControllerInstance;
-            _audioManager = _appController.AudioManager;
-
             this.InitializeComponent();
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
         }
-
-        public async void InitExploreItems()
-        {
-            if (!_audioManager.IsPlaying)
-                _audioManager.EmptyPlaylist(QueueType.Explore);
-
-            _exploreTracks = new ExploreLoadingCollection(_appController.DataManager, chosenCategory);
-            _exploreTracks.CollectionChanged += _exploreTracks_CollectionChanged;
-            NotifyPropertyChanged("CategoryTrack");
-        }
-
-        private void _exploreTracks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            lock (_padlock)
-            {
-                //Todo audiomanager shit
-                _audioManager.AddToPlaylist(_exploreTracks[_exploreTracks.Count - 1], QueueType.Explore);
-            }
-        }
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        // Used to notify the page that a data context property changed
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        #endregion INotifyPropertyChanged Members
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
@@ -167,16 +102,33 @@ namespace SoundCloud.View.ExploreViews
         /// handlers that cannot cancel the navigation request.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            chosenCategory = (String) e.Parameter;
-            CategoryTitle = chosenCategory;
-            NotifyPropertyChanged("CategoryTitle");
-            InitExploreItems();
+            if (e.Parameter != null)
+            {
+                int userId = (int) e.Parameter;
+                _userView = new MePivot(userId);
+            }
+
             this.navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Used to notify the page that a data context property changed
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         #endregion

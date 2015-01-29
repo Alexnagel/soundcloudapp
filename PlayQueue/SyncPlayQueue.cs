@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Storage;
 using SQLite.Net;
 using SQLite.Net.Interop;
@@ -70,13 +69,21 @@ namespace BackgroundAudio.PlayQueue
 
         #region Public 
 
-        public bool EmptyQueue()
+        public bool EmptyQueue(QueueType type)
         {
             using (var dbConnection = new SQLiteConnection(new SQLitePlatformWinRT(), DB_NAME))
             {
                 try
                 {
-                    return dbConnection.DeleteAll<BaseTrack>() == 1;
+                    var toDelete = dbConnection.Table<BaseTrack>().Where(b => b.Type == type).ToList();
+
+                    int deleted = 1;
+                    foreach (var deleteItem in toDelete)
+                    {
+                        if (dbConnection.Delete(deleteItem) == 0)
+                            deleted = 0;
+                    }
+                    return deleted != 0;
                 }
                 catch (SQLiteException e)
                 {
@@ -88,7 +95,8 @@ namespace BackgroundAudio.PlayQueue
 
         public void SetQueue(IEnumerable<BaseTrack> playlist)
         {
-            EmptyQueue();
+            // Casting because WinRT ain't liking no Lists
+            EmptyQueue(((List<BaseTrack>)playlist)[0].Type);
             using (var dbConnection = new SQLiteConnection(new SQLitePlatformWinRT(), DB_NAME))
             {
                 dbConnection.InsertAll(playlist);
@@ -147,27 +155,27 @@ namespace BackgroundAudio.PlayQueue
             }
         }
 
-        public BaseTrack GetTrack(string id)
+        public BaseTrack GetTrack(string id, QueueType type)
         {
             using (var dbConnection = new SQLiteConnection(new SQLitePlatformWinRT(), DB_NAME))
             {
-                return dbConnection.Table<BaseTrack>().Where(t => t.Id == id).First();
+                return dbConnection.Table<BaseTrack>().Where(t => t.Id == id && t.Type == type).FirstOrDefault();
             }
         }
 
-        public BaseTrack GetNext(int dbId)
+        public BaseTrack GetNext(int dbId, QueueType type)
         {
             using (var dbConnection = new SQLiteConnection(new SQLitePlatformWinRT(), DB_NAME))
             {
-                return dbConnection.Get<BaseTrack>(++dbId);
+                return dbConnection.Table<BaseTrack>().Where(t => t.dbId > dbId && t.Type == type).FirstOrDefault();
             }
         }
 
-        public BaseTrack GetPrevious(int dbId)
+        public BaseTrack GetPrevious(int dbId, QueueType type)
         {
             using (var dbConnection = new SQLiteConnection(new SQLitePlatformWinRT(), DB_NAME))
             {
-                return dbConnection.Get<BaseTrack>(--dbId);
+                return dbConnection.Table<BaseTrack>().Where(t => t.dbId > dbId && t.Type == type).FirstOrDefault();
             }
         }
 
